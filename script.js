@@ -17,7 +17,8 @@ const winGame = [
     [6, 4, 2]
 ]
 
-const cases = document.querySelectorAll('.case'); // on fait référence à la classe="case" de l'html
+// on fait référence à la classe="case" de l'html
+const cases = document.querySelectorAll('.case');
 start();
 
 function start() {
@@ -32,7 +33,10 @@ function start() {
 
 // il se passe quelque chose quand je clique
 function clickedCase(square) {
-    clicked(square.target.id, humanPlayer)
+    if(typeof blankTable[square.target.id] == 'number') {
+        clicked(square.target.id, humanPlayer)
+        if(!VerifyEgality()) clicked(bestTentative(), pcPlayer);
+    }
 }
 
 function clicked(squareId, player) {
@@ -55,6 +59,7 @@ function verifyVictory(board, player) {
     return gameWinner;
 }
 
+// coloration cases jeu gagnant / jeu perdant + affichage de fin
 function gameOver(gameWinner) {
     for (let index of winGame [gameWinner.index]) {
         document.getElementById(index).style.backgroundColor =
@@ -63,4 +68,82 @@ function gameOver(gameWinner) {
     for (var i = 0; i < cases.length; i++) {
         cases[i].removeEventListener('click', clickedCase, false);
     }
+    showWinner(gameWinner.player == humanPlayer ? " Vous avez gagné !!! 😎" : "Perdu !!! 😥");
+}
+
+function showWinner(whoIs) {
+    document.querySelector(".finDuGame").style.display = "block";
+    document.querySelector(".finDuGame .message").innerText = whoIs;
+}
+
+function emptySquares() {
+    return blankTable.filter(s => typeof s == 'number');
+}
+
+function bestTentative() {
+    return aIntelligence(blankTable, pcPlayer).index;
+}
+
+// on vérifie si le jeu est en égalité, on affiche message "Egalité" + couleur verte.
+function VerifyEgality() {
+    if(emptySquares().length == 0) {
+        for (var i = 0; i < cases.length; i++) {
+            cases[i].style.backgroundColor = "green";
+            cases[i].removeEventListener('click', clickedCase, false);
+        }
+        showWinner("Egalité !")
+        return true;
+    }
+    return false;
+}
+
+// intelligence artificielle pour que le niveau du TIC TAC TOE soit plus élevé !
+function aIntelligence(newTable, player) {
+    var availTentatives = emptySquares(newTable);
+
+    if(verifyVictory(newTable, player)) {
+        return {score: -10};
+    } else if (verifyVictory(newTable, pcPlayer)) {
+        return {score: 20};
+    } else if (availTentatives.length === 0) {
+        return {score: 0};
+    }
+    var moves = [];
+    for (var i = 0; i < availTentatives.length; i++) {
+        var move = {};
+        move.index = newTable[availTentatives[i]];
+        newTable[availTentatives[i]] = player;
+
+        if (player == pcPlayer) {
+            var result = aIntelligence(newTable, humanPlayer);
+            move.score = result.score;
+        } else {
+            var result = aIntelligence(newTable, pcPlayer);
+            move.score = result.score;
+        }
+
+        newTable[availTentatives[i]] = move.index;
+
+        moves.push(move);
+    }
+
+    var bestMove;
+    if(player === pcPlayer) {
+        var bestScore = -10000;
+        for(var i = 0; i < moves.length; i++) {
+            if (moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    } else {
+        var bestScore = 10000;
+        for(var i = 0; i < moves.length; i++) {
+            if (moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+    return moves[bestMove];
 }
