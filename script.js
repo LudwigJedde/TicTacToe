@@ -43,5 +43,24 @@ function clicked(squareId, player) {
 }
 
 function verifyVictory(board, player) {
-    
+    let parties = board.reduce((a, e, i) => 
+        (e === player) ? a.concat(i) : a, [])
+    let gameWinner = null;
+    for (let [index, win] of winGame.entries()) { // on vérifie dans les combinaisons possibles de victoires si ça matche
+        if(win.every(element => parties.indexOf(element) > -1)) {
+            gameWinner = {index: index, player: player};
+            break;
+        }
+    }
+    return gameWinner;
+}
+
+function gameOver(gameWinner) {
+    for (let index of winGame [gameWinner.index]) {
+        document.getElementById(index).style.backgroundColor =
+        gameWinner.player == humanPlayer ? "blue" : "red";
+    }
+    for (var i = 0; i < cases.length; i++) {
+        cases[i].removeEventListener('click', clickedCase, false);
+    }
 }
