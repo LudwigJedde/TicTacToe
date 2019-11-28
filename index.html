@@ -11,30 +11,29 @@
     <!-- On crée la grille : il y a 9 cases dans le Tic tac toe -->
     <table>
         <tr>
-            <td class="case" id="0">0</td>
-            <td class="case" id="1">1</td>
-            <td class="case" id="2">2</td>
+            <td class="case" id="0"></td>
+            <td class="case" id="1"></td>
+            <td class="case" id="2"></td>
         </tr>
         <tr>
-            <td class="case" id="3">3</td>
-            <td class="case" id="4">4</td>
-            <td class="case" id="5">5</td>
+            <td class="case" id="3"></td>
+            <td class="case" id="4"></td>
+            <td class="case" id="5"></td>
         </tr>
         <tr>
-            <td class="case" id="6">6</td>
-            <td class="case" id="7">7</td>
-            <td class="case" id="8">8</td>
+            <td class="case" id="6"></td>
+            <td class="case" id="7"></td>
+            <td class="case" id="8"></td>
         </tr>
     </table>
     <!-- On affiche un message à la fin du jeu -->
     <div class="finDuGame">
         <div class="message"></div>
+        <!-- bouton qui s'affiche à la fin du jeu -->
+        <button onClick="start()">Rejouer ?</button>
     </div>
-    <!-- bouton qui s'affiche à la fin du jeu -->
-    <button onClick="start()">Rejouer ?</button>
-    <canvas>
-        tic tac toe
-    </canvas>
+    <p id="timer"></p>
+    
     <script src="script.js"></script>
 </body>
 </html>

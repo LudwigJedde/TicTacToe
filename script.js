@@ -21,6 +21,10 @@ const winGame = [
 const cases = document.querySelectorAll('.case');
 start();
 
+// on définit les scores
+const pointsVictory = 10;
+const pointsEgality = 5;
+
 function start() {
     document.querySelector(".finDuGame").style.display = "none"
     blankTable = Array.from(Array(9).keys());
@@ -147,3 +151,31 @@ function aIntelligence(newTable, player) {
     }
     return moves[bestMove];
 }
+
+// timer 
+
+// point de départ du chrono
+var countDownDate = new Date().getTime() + 180000;
+
+// Mettre à jour le compteur toutes les secondes
+var x = setInterval(function(){
+    // Get la date et le temps
+    var now = new Date().getTime();
+
+    // trouver l'écart entre maintenant et le compte à rebours final
+    var distance = countDownDate - now;
+
+    // Calcul du temps en minutes et secondes
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+
+// Montrer le résultat dans l'élément avec l'id="timer"
+document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+
+// si le compte à rebours est terminé, écrire ce texte
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("timer").innerHTML = "Temps écoulé";
+    }
+}, 1000);
