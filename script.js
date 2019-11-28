@@ -1,0 +1,47 @@
+var blankTable; // tableau vierge au début de la partie
+const humanPlayer = 'O'; // action de l'humain
+const pcPlayer = 'X'; // action de l'ordinateur
+
+// On paramètre les situations qui permettent de gagner
+const winGame = [
+    // combo horizontal
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    // combo vertical
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    // combo diagonal
+    [0, 4, 8],
+    [6, 4, 2]
+]
+
+const cases = document.querySelectorAll('.case'); // on fait référence à la classe="case" de l'html
+start();
+
+function start() {
+    document.querySelector(".finDuGame").style.display = "none"
+    blankTable = Array.from(Array(9).keys());
+    for (var i = 0; i < cases.length; i++) {
+        cases[i].innerText = '';
+        cases[i].style.removeProperty('background-color');
+        cases[i].addEventListener('click', clickedCase, false);
+    }
+}
+
+// il se passe quelque chose quand je clique
+function clickedCase(square) {
+    clicked(square.target.id, humanPlayer)
+}
+
+function clicked(squareId, player) {
+    blankTable[squareId] = player;
+    document.getElementById(squareId).innerText = player;
+    let gameWinner = verifyVictory(blankTable, player)
+    if (gameWinner) gameOver(gameWinner)
+}
+
+function verifyVictory(board, player) {
+    
+}
